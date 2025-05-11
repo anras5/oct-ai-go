@@ -2,7 +2,7 @@
 
 Classify your OCT scans with AI. The app uses Google's Gemini API to classify and explain the scans. You need to obtain an API key from [AI Studio](https://aistudio.google.com) to use the app (for low requests frequency it is available for free).
 
-![app](./assets/app.png)
+![app](./assets/app.jpg)
 
 ## How to run?
 
