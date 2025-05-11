@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 // Response represents the structured AI response
@@ -42,6 +43,12 @@ func corsMiddleware() gin.HandlerFunc {
 }
 
 func main() {
+
+	// reading the .env file
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
+
 	router := gin.Default()
 	router.Use(corsMiddleware())
 
