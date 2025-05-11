@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -24,20 +25,29 @@ type HealthResponse struct {
 	Status string `json:"status"`
 }
 
+func corsMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+
+		// Handle preflight OPTIONS requests
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(http.StatusNoContent)
+			return
+		}
+
+		c.Next()
+	}
+}
+
 func main() {
-	// Set up gin router
 	router := gin.Default()
+	router.Use(corsMiddleware())
 
-	// Configure API
-	router.MaxMultipartMemory = 8 << 20 // 8 MiB
-
-	// Health check endpoint
+	router.MaxMultipartMemory = 8 << 20
 	router.GET("/health", healthCheckHandler)
-
-	// Image analysis endpoint
 	router.POST("/analyze", analyzeImageHandler)
-
-	// Start server
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"

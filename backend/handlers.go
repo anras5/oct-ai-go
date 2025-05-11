@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -64,6 +63,5 @@ func analyzeImageHandler(c *gin.Context) {
 		})
 		return
 	}
-	log.Println(response)
 	c.JSON(http.StatusOK, response)
 }
